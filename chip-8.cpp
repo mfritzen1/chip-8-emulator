@@ -161,7 +161,12 @@ struct Chip8
   /* 8XYE set Vx <<= 1 */
   void ins8XYE(unsigned short registerX, unsigned short registerY)
   {
-    std::cout << "8XYE set Vx <<= 1" << "\n";
+    if (dataRegisters[registerX] >> 15 & 0x1) {
+      dataRegisters[0xf] = 1;
+    } else {
+      dataRegisters[0xf] = 0;
+    }
+    dataRegisters[registerX] = dataRegisters[registerX] << 1;
   }
 
   /* 9XY0 skip next instruction if Vx != Vy */
@@ -182,7 +187,7 @@ struct Chip8
   /* BNNN set PC = V0 + NNN */
   void insBNNN(unsigned short address)
   {
-    std::cout << "BNNN set PC = V0 + NNN" << "\n";
+    pc = dataRegisters[0] + address;
   }
 
   /* CXNN set Vx = rand() & NN */
@@ -212,7 +217,7 @@ struct Chip8
   /* FX07 set Vx to value of delay timer */
   void insFX07(unsigned short registerX)
   {
-    std::cout << "FX07 set Vx to value of delay timer" << "\n";
+    dataRegisters[registerX] = delayTimer;
   }
 
   /* FX0A wait for keypress, store in Vx */
@@ -236,7 +241,7 @@ struct Chip8
   /* FX1E set I += Vx */
   void insFX1E(unsigned short registerX)
   {
-    std::cout << "FX1E set I += Vx" << "\n";
+    I += dataRegisters[registerX];
   }
 
   /* FX29 set I = location of font character in Vx */

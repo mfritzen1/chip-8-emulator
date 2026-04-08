@@ -27,6 +27,7 @@ void decode(unsigned short opcode)
 			break;
 		default:
 			chip8.ins0NNN();
+			break;
 		}
 		break;
 	case 0x1:
@@ -82,6 +83,7 @@ void decode(unsigned short opcode)
 			break;
 		default:
 			std::cout << "unknown opcode starting with 8" << "\n";
+			break;
 		}
 		break;
 	case 0x9:
@@ -110,6 +112,7 @@ void decode(unsigned short opcode)
 			break;
 		default:
 			std::cout << "unknown opcode starting with E" << "\n";
+			break;
 		}
 		break;
 	case 0xf:
@@ -126,6 +129,7 @@ void decode(unsigned short opcode)
 				break;
 			default:
 				std::cout << "unknown opcode starting with FX0" << "\n";
+				break;
 			}
 			break;
 		case 0x1:
@@ -142,6 +146,7 @@ void decode(unsigned short opcode)
 				break;
 			default:
 				std::cout << "unknown opcode starting with FX1" << "\n";
+				break;
 			}
 			break;
 		case 0x2:
@@ -158,10 +163,12 @@ void decode(unsigned short opcode)
 			break;
 		default:
 			std::cout << "unknown opcode starting with F" << "\n";
+			break;
 		}
 		break;
 	default:
 		std::cout << "unknown opcode" << "\n";
+		break;
 	}
 
 	return;
