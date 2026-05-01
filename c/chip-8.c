@@ -5,6 +5,7 @@
 #define SCREEN_WIDTH 64
 #define MEMORY_SIZE 4096
 #define FONT_START 0x50
+#define PROGRAM_START 0x200
 
 int main()
 {
@@ -52,6 +53,31 @@ int main()
 			0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
 			0xF0, 0x80, 0xF0, 0x80, 0x80	// F
 	};
+
+	// load font data into memory
+	for (int i = 0; i < 80; i++)
+	{
+		memory[FONT_START + i] = font[i];
+	}
+
+	// TODO: load program
+
+	pc = PROGRAM_START;
+
+	// emulation loop
+	while (1)
+	{
+		// fetch next instruction
+		unsigned char opcodePart1 = memory[pc];
+		unsigned char opcodePart2 = memory[pc + 1];
+		pc += 2;
+
+		// decode instruction
+		unsigned char nibble1 = (opcodePart1 & 0xF0) >> 4;
+		unsigned char nibble2 = (opcodePart1 & 0xF);
+		unsigned char nibble3 = (opcodePart2 & 0xF0) >> 4;
+		unsigned char nibble4 = (opcodePart2 & 0xF);
+	}
 
 	return 0;
 }
