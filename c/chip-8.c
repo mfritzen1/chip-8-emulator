@@ -77,6 +77,145 @@ int main()
 		unsigned char nibble2 = (opcodePart1 & 0xF);
 		unsigned char nibble3 = (opcodePart2 & 0xF0) >> 4;
 		unsigned char nibble4 = (opcodePart2 & 0xF);
+
+		switch (nibble1)
+		{
+		case 0x0:
+			switch (nibble2 << 8 | nibble3 << 4 | nibble4)
+			{
+			case 0x0E0:
+				ins00E0();
+				break;
+			case 0x0EE:
+				ins00EE(&pc, &stack, &sp);
+				break;
+			default:
+				ins0NNN();
+				break;
+			}
+			break;
+		case 0x1:
+			ins1NNN(nibble2 << 8 | nibble3 << 4 | nibble4, &pc);
+			break;
+		case 0x2:
+			ins2NNN(nibble2 << 8 | nibble3 << 4 | nibble4, &pc, &stack, &sp);
+			break;
+		case 0x3:
+			ins3XNN(nibble2, nibble3 << 4 | nibble4, &dataRegister, &pc);
+			break;
+		case 0x4:
+			ins4XNN(nibble2, nibble3 << 4 | nibble4, &dataRegister, &pc);
+			break;
+		case 0x5:
+			ins5XY0(nibble2, nibble3, &dataRegister, &pc);
+			break;
+		case 0x6:
+			ins6XNN(nibble2, nibble3 << 4 | nibble4, &dataRegister);
+			break;
+		case 0x7:
+			ins7XNN(nibble2, nibble3 << 4 | nibble4, &dataRegister);
+			break;
+		case 0x8:
+			switch (nibble4)
+			{
+			case 0x0:
+				ins8XY0(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x1:
+				ins8XY1(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x2:
+				ins8XY2(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x3:
+				ins8XY3(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x4:
+				ins8XY4(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x5:
+				ins8XY5(nibble2, nibble3, &dataRegister);
+				break;
+			case 0x6:
+				ins8XY6(nibble2, &dataRegister);
+				break;
+			case 0x7:
+				ins8XY7(nibble2, nibble3, &dataRegister);
+				break;
+			default:
+				ins8XYE(nibble2, &dataRegister);
+				break;
+			}
+			break;
+		case 0x9:
+			ins9XY0(nibble2, nibble3, &dataRegister, &pc);
+			break;
+		case 0xA:
+			insANNN(nibble2 << 8 | nibble3 << 4 | nibble4, &I);
+			break;
+		case 0xB:
+			insBNNN(nibble2 << 8 | nibble3 << 4 | nibble4, &dataRegister, &pc);
+			break;
+		case 0xC:
+			insCXNN();
+			break;
+		case 0xD:
+			insDXYN();
+			break;
+		case 0xE:
+			switch (nibble3)
+			{
+			case 0x9:
+				insEX9E();
+				break;
+			default:
+				insEXA1();
+				break;
+			}
+			break;
+		case 0xF:
+			switch (nibble3)
+			{
+			case 0x0:
+				switch (nibble4)
+				{
+				case 0x7:
+					insFX07(nibble2, &dataRegister, &delayTimer);
+					break;
+				default:
+					insFX0A();
+					break;
+				}
+				break;
+			case 0x1:
+				switch (nibble4)
+				{
+				case 0x5:
+					insFX15(nibble2, &dataRegister, &delayTimer);
+					break;
+				case 0x8:
+					insFX18(nibble2, &dataRegister, &soundTimer);
+					break;
+				default:
+					insFX1E(nibble2, &dataRegister, &I);
+					break;
+				}
+				break;
+			case 0x2:
+				insFX29(nibble2, FONT_START, &dataRegister, &I);
+				break;
+			case 0x3:
+				insFX33(nibble2, &dataRegister, &I, &memory);
+				break;
+			case 0x5:
+				insFX55(nibble2, &dataRegister, &I, &memory);
+				break;
+			default:
+				insFX65(nibble2, &dataRegister, &I, &memory);
+				break;
+			}
+			break;
+		}
 	}
 
 	return 0;
