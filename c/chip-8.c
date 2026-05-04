@@ -1,5 +1,12 @@
+#ifndef STDIO
+#define STDIO
 #include <stdio.h>
+#endif
+
+#ifndef INSTRUCTIONS
+#define INSTRUCTIONS
 #include "instructions.h"
+#endif
 
 #define SCREEN_HEIGHT 32
 #define SCREEN_WIDTH 64
