@@ -6,6 +6,7 @@
 #define MEMORY_SIZE 4096
 #define FONT_START 0x50
 #define PROGRAM_START 0x200
+#define PROGRAM "../roms/IBM_Logo.ch8"
 
 int main()
 {
@@ -17,6 +18,7 @@ int main()
 	unsigned char soundTimer;
 	unsigned short stack[16];
 	unsigned short sp;
+	int byte = 0;
 
 	const unsigned short FONT_0_LOCATION = FONT_START;
 	const unsigned short FONT_1_LOCATION = FONT_START + 5;
@@ -54,13 +56,37 @@ int main()
 			0xF0, 0x80, 0xF0, 0x80, 0x80	// F
 	};
 
+	// clear memory
+	for (int i = 0; i < MEMORY_SIZE; i++)
+	{
+		memory[i] = 0x0;
+	}
+
 	// load font data into memory
 	for (int i = 0; i < 80; i++)
 	{
 		memory[FONT_START + i] = font[i];
 	}
 
-	// TODO: load program
+	// load program
+	pc = PROGRAM_START;
+	FILE *file = fopen(PROGRAM, "rb");
+	if (file == NULL)
+	{
+		printf("Could not open file: %s\n", PROGRAM);
+		return 1;
+	}
+
+	int maxProgramSize = MEMORY_SIZE - PROGRAM_START;
+	while (byte != EOF)
+	{
+		// I don't know why it reads every two bytes in reverse order
+		byte = fgetc(file);
+		memory[pc + 1] = byte;
+		byte = fgetc(file);
+		memory[pc] = byte;
+		pc += 2;
+	}
 
 	pc = PROGRAM_START;
 
